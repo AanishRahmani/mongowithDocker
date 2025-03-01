@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: my_mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db # Persistent data storage
+
+  mongo-express:
+    image: mongo-express
+    container_name: my_mongo_express
+    restart: always
+    depends_on:
+      - mongodb
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin123
+      ME_CONFIG_MONGODB_SERVER: mongodb
+    ports:
+      - "8081:8081" # Access Mongo Express at http://localhost:8081
+
+volumes:
+  mongo_data:
